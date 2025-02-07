@@ -1,0 +1,135 @@
+.popup {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* height: 100%; */
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    }
+    
+    .popup-inner {
+    background-color: rgb(130, 27, 27);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    /* background-color: red; */
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    width: 100%;
+    }
+    
+    .popup-inner h2 {
+    margin-top: 0;
+    }
+    
+    .popup-inner label {
+    display: block;
+    margin-bottom: 10px;
+    }
+    
+    .popup-inner input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    }
+    
+    .popup-inner button[type="submit"],
+    .popup-inner button[type="button"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    }
+    
+    .popup-inner button[type="submit"]:hover,
+    .popup-inner button[type="button"]:hover {
+    background-color: #45a049;
+    }
+    
+    .popup-inner button[type="submit"] {
+    margin-top: 20px;
+    }
+    
+    .popup-inner button[type="button"] {
+    margin-top: 20px;
+    background-color: #f44336;
+    }
+    
+    .popup-inner button[type="button"]:hover {
+    background-color: #da190b;
+    }
+    
+    .popup-inner button[type="submit"]:disabled {
+    background-color: #bfbfbf;
+    color: #ffffff;
+    cursor: not-allowed;
+    }
+    
+    .popup-inner button[type="button"]:disabled {
+    background-color: #bfbfbf;
+    color: #ffffff;
+    cursor: not-allowed;
+    }
+    .heading {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #1e40af; /* Blue-800 */
+        margin-bottom: 1rem;
+    }
+    .formContainer {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 7%;
+        /* background-color: #f8f9fa; Light gray background */
+        /* padding: 20px; */
+        /* border-radius: 10px; */
+        /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
+      }
+      
+      .inputField {
+        width: 100%;
+        padding: 8px;
+        margin: 12px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      .submitButton {
+        width: 100%;
+        padding: 7px;
+        margin: 10px 0px;
+        background-color: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      
+      .submitButton:hover {
+        background-color: #0056b3;
+      }
+      .label {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
