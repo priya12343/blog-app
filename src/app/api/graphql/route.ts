@@ -23,7 +23,7 @@ const handler = startServerAndCreateNextHandler(apolloServer, {
       console.warn("No token provided");
       return {}; // No token
     }
-console.log("tokentoken-----",)
+  console.log("tokentoken----- from server",token)
 
     const decoded = verifyToken(token);
     if (!decoded) {

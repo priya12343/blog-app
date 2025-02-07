@@ -3,8 +3,6 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import styles from "../../../../../public/styles/login.module.css";
 import { useMutation } from "@apollo/client";
 import {  SIGNUP_MUTATION } from "@/app/api/graphql/mutation";
-// import { LOGIN_MUTATION } from "../";
-// import { useRouter } from "next/router";
 
 interface SignUpFormProps {
   modalType: "login" | "signUp";

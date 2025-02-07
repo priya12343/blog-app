@@ -10,9 +10,9 @@ const prisma = new PrismaClient();
       try {
         // Calculate pagination
         const skip = (page - 1) * limit;
-
+    
         // Create the search condition
-        const whereCondition:Prisma.PostWhereInput = search
+        const whereCondition: Prisma.PostWhereInput = search
           ? {
               OR: [
                 { title: { contains: search, mode: "insensitive" } },
@@ -20,7 +20,7 @@ const prisma = new PrismaClient();
               ],
             }
           : {};
-
+    
         // Query posts with pagination and search
         const posts = await prisma.post.findMany({
           where: whereCondition,
@@ -28,12 +28,12 @@ const prisma = new PrismaClient();
           take: limit,
           skip: skip,
         });
-
+    
         // Get total number of posts matching the search condition
         const totalPosts = await prisma.post.count({
           where: whereCondition,
         });
-
+    
         // Return the posts and pagination info
         return {
           data: posts,
@@ -47,6 +47,7 @@ const prisma = new PrismaClient();
         throw new Error("Failed to fetch posts");
       }
     },
+    
   
     getPost: async ({ id }:any) => {
       return await prisma.post.findUnique({ where: { id }, include: { author: true } });
@@ -84,9 +85,11 @@ const prisma = new PrismaClient();
       if (!isValidPassword) throw new Error('Invalid password');
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
-
+    console.log("tokentoken-------------",token,user)
+    // const tokens = localStorage.getItem("token");
       return {
-        token, // Return token
+
+        token:token.toString(), // Return token
         user,  // Return user object
       };
     },

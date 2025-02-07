@@ -14,23 +14,20 @@ export const createToken = (user: UserPayload): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // 1 hour expiry
 };
 
-export const verifyToken = (token: string): UserPayload | null => {
+export function verifyToken(token: string) {
   try {
-    console.log("Token received for verification:", token); 
-    console.log("Type of token:", typeof token); // Print token type
-
+    console.log("Raw Token Received:", token,typeof token); // Debugging step
     if (!token || typeof token !== "string") {
-      console.error("Invalid token format:", token);
-      return null;
+      throw new Error("No token provided");
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as UserPayload;
     console.log("Decoded Token:", decoded);
     return decoded;
   } catch (error) {
     console.error("Token verification failed:", error);
-    return null; 
+    throw new Error("Invalid or expired token");
   }
-};
+}
 
 
