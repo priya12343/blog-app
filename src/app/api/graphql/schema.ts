@@ -2,6 +2,7 @@ import { gql } from 'graphql-tag';  // Use graphql-tag instead of @apollo/client
 
 export const typeDefs = gql`
 scalar DateTime
+scalar ID
   type UserSignUp {
     id: Int
     username:String
@@ -23,8 +24,6 @@ scalar DateTime
   author: User!
   authorId: Int!
 }
-
-
   type AuthPayload {
     token: String
     user: User
@@ -43,14 +42,14 @@ scalar DateTime
     }
   type Query {
     getPosts(page: Int!, limit: Int!, search: String): PostConnection
-    getPost(id: Int!): Post
+    getPostById(id: Int!): Post
   }
 
   type Mutation {
     signup(username:String!,email: String!, password: String!): AuthPayloadSignUp
     login(email: String!, password: String!): AuthPayload
     createPost(title: String!, content: String!, category: String!): Post!
-    updatePost(id: Int!, title: String!, content: String!): Post
+    updatePost(id: Int!, title: String, content: String, category: String): Post
     deletePost(id: Int!): Boolean
   }
 `;

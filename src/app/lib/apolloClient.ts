@@ -1,19 +1,14 @@
+// lib/apolloClient.ts
+
 'use client';
 
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_API_URL + "/api/graphql" || 'http://localhost:3000/api/graphql',
 });
-
-// Ensure localStorage is accessed only on the client
-// const getAuthToken = () => {
-//   if (typeof window !== "undefined" && window.localStorage) {
-//     return localStorage.getItem("token");
-//   }
-//   return null;
-// };
 
 const authLink = setContext((_, { headers }) => {
   if (typeof window === "undefined") {
@@ -34,5 +29,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   ssrMode: typeof window === "undefined", // Enable SSR mode for server-side execution
 });
+
 
 export default client;

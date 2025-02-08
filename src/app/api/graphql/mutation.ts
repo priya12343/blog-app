@@ -39,7 +39,16 @@ export const GET_POSTS = gql`
     }
   }
 `;
-
+export const GET_POST_BY_ID = gql`
+  query getPostById($id: Int!) {
+    getPostById(id: $id) {
+      id
+      title
+      content
+      category
+    }
+  }
+`;
 export const CREATE_POST = gql`
   mutation createPost($title: String!, $content: String!, $category: String!) {
     createPost(title: $title, content: $content, category: $category) {
@@ -51,4 +60,21 @@ export const CREATE_POST = gql`
     }
   }
 `;
+export const UPDATE_POST = gql`
+  mutation updatePost($id: Int!, $title: String!, $content: String!, $category: String!) {
+    updatePost(id: $id, title: $title, content: $content, category: $category) {
+      id
+      title
+      content
+      category
+    }
+  }
+`;
+export const DELETE_POST = gql`
+  mutation DeletePost($id: Int!) {
+    deletePost(id: $id)
+  }
+`;
+
+
 

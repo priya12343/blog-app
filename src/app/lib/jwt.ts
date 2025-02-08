@@ -16,16 +16,13 @@ export const createToken = (user: UserPayload): string => {
 
 export function verifyToken(token: string) {
   try {
-    console.log("Raw Token Received:", token,typeof token); // Debugging step
     if (!token || typeof token !== "string") {
       throw new Error("No token provided");
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as UserPayload;
-    console.log("Decoded Token:", decoded);
+    const decoded = jwt?.verify(token, process.env.JWT_SECRET as string) as UserPayload;
     return decoded;
   } catch (error) {
-    console.error("Token verification failed:", error);
     throw new Error("Invalid or expired token");
   }
 }
