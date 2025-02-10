@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@apollo/client";
 import { SIGNUP_MUTATION } from "@/app/api/graphql/mutation";
@@ -15,12 +15,7 @@ const SignUpForm = () => {
     } = useForm();
 
     const [signup, { loading, error }] = useMutation(SIGNUP_MUTATION);
-    const [mounted, setMounted] = useState(false);
   const router = useRouter();
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     const formSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
@@ -37,6 +32,7 @@ const SignUpForm = () => {
             } else {
             }
         } catch (e) {
+            console.log(e)
         }
     };
 

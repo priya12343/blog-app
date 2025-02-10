@@ -5,36 +5,35 @@ import { resolvers } from "./resolver";
 import { NextRequest } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { verifyToken } from "@/app/lib/jwt";
- // Import Prisma instance
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
 });
+
 const handler = startServerAndCreateNextHandler(apolloServer, {
-   context: async (req: NextRequest) => {
-  try {
-    const authHeader = req?.headers?.get("authorization");
+  context: async (req: NextRequest) => {
+    try {
+      const authHeader = req?.headers?.get("authorization");
 
-    const token = authHeader?.split(" ")[1]; // Extract the token
+      const token = authHeader?.split(" ")[1]; // Extract the token
 
-    if (!token) {
-      return {}; // No token
+      if (!token) {
+        return { userId: null, prisma }; // Return a valid context even when no token
+      }
+
+      const decoded = verifyToken(token);
+      if (!decoded) {
+        return { userId: null, prisma }; // Token invalid, still return valid context
+      }
+
+      return { userId: decoded.userId, prisma }; // Attach user info and Prisma client to context
+    } catch (error) {
+      console.log(error)
+      return { userId: null, prisma }; // Handle any unexpected errors, still return context
     }
-
-    const decoded = verifyToken(token);
-    if (!decoded) {
-      return {}; // Token invalid
-    }
-
-    return { userId: decoded.userId, prisma }; // Attach user info and Prisma client to context
-  } catch (error) {
-    return {}; // Handle any unexpected errors
-  }
-},
-
-  });
-  
-  
+  },
+});
 
 export { handler as GET, handler as POST };
+

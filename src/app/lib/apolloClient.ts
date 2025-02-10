@@ -1,8 +1,6 @@
 // lib/apolloClient.ts
 
 'use client';
-
-
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 

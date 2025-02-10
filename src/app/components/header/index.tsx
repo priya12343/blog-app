@@ -1,19 +1,3 @@
-// import React from "react";
-// const Header = () => {
-//   return (
-//     <header className="tw-bg-white tw-shadow-md tw-p-4 tw-fixed tw-top-0 tw-w-full tw-z-10">
-//       <div className="tw-container tw-mx-auto tw-flex tw-items-center tw-justify-between">
-//         {/* Blog Title - Centered */}
-//         <div className="tw-flex-1 tw-flex tw-justify-center">
-//           <h1 className="tw-text-xl tw-font-bold tw-text-gray-800">
-//             My Blog
-//           </h1>
-//         </div>
-//       </div>
-//     </header>
-//   );
-// };
-
 // export default Header;
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -30,9 +14,6 @@ const Header = () => {
   };
 
   // Close the menu after a link is clicked
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
 
   const toggleLogoutPopup=()=>{
     setIsLogoutOpen(!isLogoutOpen);

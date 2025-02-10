@@ -21,41 +21,7 @@ const EditPost = () => {
       const id = Array.isArray(params.id) ? params.id[0] : params.id;
       setPostId(parseInt(id as string)); // Set the ID
     }
-  }/* , [params?.id] */);
-  
-  
-  // Ensure that the `id` is available before making the query
-  // if (postId === null) {
-  //   return (
-  //     <div className="tw-flex tw-justify-center tw-items-center tw-h-screen tw-text-center tw-text-lg tw-font-semibold">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
-  
-  // if (loading) {
-  //   return (
-  //     <div className="tw-flex tw-justify-center tw-items-center tw-h-screen tw-text-center tw-text-lg tw-font-semibold">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
-  
-  // if (error) {
-  
-  //   return (
-  //     <div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-screen tw-text-center">
-  //       <p className="tw-text-lg tw-font-semibold tw-text-red-500">Error: {error.message}</p>
-  //       <button
-  //         onClick={() => router.push('/')}
-  //         className="tw-mt-4 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-font-semibold tw-px-6 tw-py-2 tw-rounded-lg tw-transition-all"
-  //       >
-  //         View Posts
-  //       </button>
-  //     </div>
-  //   );
-  // }
-  
+  }, [params?.id]);
 
   return (
     <>

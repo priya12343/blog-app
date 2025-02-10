@@ -1,42 +1,46 @@
-// import { prisma } from "../../../../prisma/db";
-import { createToken } from '@/app/lib/jwt';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Resolvers } from '@apollo/client';
+import { PrismaClient, Prisma, User, Post } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 const prisma = new PrismaClient();
-export const resolvers = {
+export interface GraphQLContext {
+  userId?: number;
+}
+
+export const resolvers: Resolvers = {
   Query: {
-    getPosts: async (_parent: any, { page, limit, search }: any, context: any) => {
+    getPosts: async (
+      _parent: unknown,
+      { page, limit, search }: { page: number; limit: number; search?: string },
+      context: GraphQLContext
+    ) => {
       if (!context.userId) {
         throw new Error("No User Found");
       }
-      try {
-        // Calculate pagination
-        const skip = (page - 1) * limit;
 
-        // Create the search condition
+      try {
+        const skip = (page - 1) * limit;
         const whereCondition: Prisma.PostWhereInput = search
           ? {
-            OR: [
-              { title: { contains: search, mode: "insensitive" } },
-              { content: { contains: search, mode: "insensitive" } },
-            ],
-          }
+              OR: [
+                { title: { contains: search, mode: "insensitive" } },
+                { content: { contains: search, mode: "insensitive" } },
+              ],
+            }
           : {};
 
-        // Query posts with pagination and search
         const posts = await prisma.post.findMany({
           where: whereCondition,
-          include: { author: true }, // Including author information
+          include: { author: true },
           take: limit,
           skip: skip,
         });
-        // Get total number of posts matching the search condition
+
         const totalPosts = await prisma.post.count({
           where: whereCondition,
         });
 
-        // Return the posts and pagination info
         return {
           data: posts,
           pagination: {
@@ -45,72 +49,82 @@ export const resolvers = {
           },
         };
       } catch (error) {
+        console.log(error);
         throw new Error("Failed to fetch posts");
       }
     },
 
-    getPostById: async (_parent: any, { id }: any, context: any) => {
+    getPostById: async (
+      _parent: unknown,
+      { id }: { id: number },
+    ): Promise<Post | null> => {
       if (!id) {
         throw new Error("Post ID is required.");
       }
-      const postId = parseInt(id, 10);
+
       const post = await prisma.post.findUnique({
-        where: { id: postId },
+        where: { id },
         include: { author: true },
       });
+
       if (!post) {
         throw new Error("Post not found");
       }
 
       return post;
-    }
+    },
   },
 
   Mutation: {
-    signup: async (_: any, { username, email, password }: { username: string; email: string; password: string }) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
+    signup: async (
+      _parent: unknown,
+      { username, email, password }: { username: string; email: string; password: string }
+    ): Promise<{ token: string; user: User }> => {
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
+
       if (existingUser) {
         throw new Error("Email already in use. Please login or use another email.");
       }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const user = await prisma.user.create({
         data: { username, email, password: hashedPassword },
       });
 
-      // Create JWT token
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
-      // Return the token and user in a single response object
-      return {
-        token,
-        user: user,
-      };
+      return { token, user };
     },
 
-    login: async (_: any, { email, password }: { email: string; password: string }) => {
+    login: async (
+      _parent: unknown,
+      { email, password }: { email: string; password: string }
+    ): Promise<{ token: string; user: User }> => {
       const user = await prisma.user.findUnique({ where: { email } });
-      if (!user) throw new Error('User not found');
+
+      if (!user) throw new Error("User not found");
 
       const isValidPassword = await bcrypt.compare(password, user.password);
-      if (!isValidPassword) throw new Error('Invalid password');
+      if (!isValidPassword) throw new Error("Invalid password");
 
-      const token = jwt?.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
 
-      return {
-
-        token: token.toString(), // Return token
-        user,  // Return user object
-      };
+      return { token, user };
     },
 
-    createPost: async (_: any, { title, content, category }: any, context: any) => {
+    createPost: async (
+      _parent: unknown,
+      { title, content, category }: { title: string; content: string; category: string },
+      context: GraphQLContext
+    ): Promise<Post> => {
       if (!context.userId) {
         throw new Error("Not authenticated");
       }
 
-      return await prisma.post.create({
+      return prisma.post.create({
         data: {
           title,
           content,
@@ -120,14 +134,15 @@ export const resolvers = {
       });
     },
 
-
-    updatePost: async (_parent: any, { id, title, content, category }: any, context: any) => {
-      // Ensure `id` is being passed correctly
+    updatePost: async (
+      _parent: unknown,
+      { id, title, content, category }: { id: number; title: string; content: string; category: string },
+    ): Promise<Post> => {
       if (!id) {
-        throw new Error('Post ID is required');
+        throw new Error("Post ID is required");
       }
-      // Your logic for updating the post
-      const updatedPost = await prisma.post.update({
+
+      return prisma.post.update({
         where: { id },
         data: {
           title,
@@ -135,25 +150,21 @@ export const resolvers = {
           category,
         },
       });
-      return updatedPost;
     },
 
-    deletePost: async (_parent: any, { id }: any, context: any) => {
-      if (!context.userId) throw new Error('Not authenticated');
-      
+    deletePost: async (
+      _parent: unknown,
+      { id }: { id: number },
+    ): Promise<boolean> => {
       try {
-        const deletePost = await prisma.post.delete({
-          where: { id }
+        await prisma.post.delete({
+          where: { id },
         });
-    
-        // If the post is successfully deleted, return true.
         return true;
       } catch (error) {
-        // If the deletion fails, return false.
+        console.log(error)
         return false;
       }
     },
-    
   },
-
 };

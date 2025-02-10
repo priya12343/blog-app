@@ -14,7 +14,7 @@
     "@as-integrations/next": "^3.2.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.10.0",
-    "@prisma/client": "^6.3.0",
+    "@prisma/client": "^6.3.1",
     "@types/apollo-upload-client": "^18.0.0",
     "apollo-server-micro": "^3.13.0",
     "autoprefixer": "^10.4.20",

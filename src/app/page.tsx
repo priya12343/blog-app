@@ -1,6 +1,5 @@
+import React from "react";
 import BlogList from "./components/blogList";
-import Header from "./components/header";
-
 export default function Home() {
   return (
     <main>

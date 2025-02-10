@@ -7,11 +7,15 @@ import { useRouter } from "next/navigation";
 import { HiPencil, HiTrash, HiEye } from 'react-icons/hi'; // Heroicons variant
 
 import Header from "../header";
-
+type Post = {
+  id: number;
+  content: string;
+  title: string;
+  // other fields
+};
 export default function BlogList() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [errorVal, setErrorVal] = useState<any>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState<number | null>(null);
@@ -31,7 +35,7 @@ export default function BlogList() {
     refetch({ page: 1, limit: 5, search: e.target.value });
   };
 
-  const posts: any = data?.getPosts?.data;
+  const posts = data?.getPosts?.data;
   const filteredUsers = search
     ? posts?.filter(
       (post: { title: string; content: string }) =>
@@ -49,7 +53,7 @@ export default function BlogList() {
     refetch({ page: newPage, limit: 5, search });
   };
 
-  const handleEdit = (postId: any) => {
+  const handleEdit = (postId: number) => {
     router.push(`/edit-post/${postId}`);
   };
 
@@ -64,10 +68,11 @@ export default function BlogList() {
       }
       setIsModalOpen(false); // Close modal after delete
     } catch (error) {
+      console.log(error)
     }
   };
 
-  const handleViewPost = (postId: any) => {
+  const handleViewPost = (postId: number) => {
     router.push(`/posts/${postId}`);
   };
 
@@ -83,8 +88,8 @@ export default function BlogList() {
     const getToken = localStorage.getItem("token");
     setToken(getToken);
     refetch({ page: 1, limit: 5, search: "" });
-    setErrorVal(error);
-  });
+  }, [token, refetch]); // ✅ Add `refetch` to dependencies
+  
 
 
   return (
@@ -129,7 +134,7 @@ export default function BlogList() {
   
                 <div className="tw-max-h-[66vh] tw-overflow-y-auto tw-pb-0">
                   <ul className="tw-space-y-4">
-                    {sortedUsers.map((post: any) => (
+                    {sortedUsers.map((post:Post ) => (
                       <li
                         key={post.id}
                         className="tw-p-4 tw-bg-white tw-border tw-rounded-lg tw-shadow-md tw-max-w-3xl tw-w-full tw-h-1/6 tw-mx-auto"

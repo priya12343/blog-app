@@ -4,9 +4,15 @@ import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { CREATE_POST, UPDATE_POST } from '@/app/api/graphql/mutation';
 
-interface CreateBlogProps {
+type PostData = {
+  id: number,
+  title: string,
+  content: string,
+  category: string
+}
+type CreateBlogProps ={
   button: "create" | "edit"; // Allow both create and edit values
-  postData: any;
+  postData: PostData;
 }
 
 const CreatePost = ({ button, postData }: CreateBlogProps) => {
@@ -26,7 +32,6 @@ const CreatePost = ({ button, postData }: CreateBlogProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !content || !category) return alert('All fields are required!');
-
     if (button === undefined || button !== 'edit') {
       button = 'create'
     }
@@ -45,6 +50,7 @@ const CreatePost = ({ button, postData }: CreateBlogProps) => {
       setContent('');
       setCategory('');
     } catch (err) {
+      console.log(err)
       setAlertMessage('An error occurred while submitting the post.');
       setAlertType('error');
     } finally {
@@ -61,13 +67,12 @@ const CreatePost = ({ button, postData }: CreateBlogProps) => {
   };
   useEffect(() => {
     const authToken = localStorage.getItem('token'); // Retrieve token from localStorage
-
     if (!authToken) {
       router.replace('/login'); // Redirect to login if no token
     } else {
       setIsAuthenticated(true); // Allow rendering
     }
-  }, []);
+  }, [router]);
   if (!isAuthenticated) return null; // Prevent rendering if not authenticated
 
 
