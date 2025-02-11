@@ -1,8 +1,9 @@
+
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import { NextRequest, NextResponse } from "next/server";
 import { typeDefs } from "./schema";
 import { resolvers } from "./resolver";
+import { NextRequest } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { verifyToken } from "@/app/lib/jwt";
 
@@ -11,45 +12,28 @@ const apolloServer = new ApolloServer({
   resolvers,
 });
 
-// ✅ Middleware to add CORS headers
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // Change to your frontend domain if necessary
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+const handler = startServerAndCreateNextHandler(apolloServer, {
+  context: async (req: NextRequest) => {
+    try {
+      const authHeader = req?.headers?.get("authorization");
 
-// ✅ Handle GraphQL requests with CORS headers
-const handler = async (req: NextRequest) => {
-  const response = await startServerAndCreateNextHandler(apolloServer, {
-    context: async () => {
-      try {
-        const authHeader = req?.headers?.get("authorization");
-        const token = authHeader?.split(" ")[1];
+      const token = authHeader?.split(" ")[1]; // Extract the token
 
-        if (!token) return { userId: null, prisma };
-
-        const decoded = verifyToken(token);
-        if (!decoded) return { userId: null, prisma };
-
-        return { userId: decoded.userId, prisma };
-      } catch (error) {
-        console.log(error);
-        return { userId: null, prisma };
+      if (!token) {
+        return { userId: null, prisma }; // Return a valid context even when no token
       }
-    },
-  })(req);
 
-  // ✅ Attach CORS headers to the response
-  Object.entries(corsHeaders).forEach(([key, value]) => {
-    response.headers.set(key, value);
-  });
+      const decoded = verifyToken(token);
+      if (!decoded) {
+        return { userId: null, prisma }; // Token invalid, still return valid context
+      }
 
-  return response;
-};
-
-// ✅ Handle CORS preflight requests
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
-}
+      return { userId: decoded.userId, prisma }; // Attach user info and Prisma client to context
+    } catch (error) {
+      console.log(error)
+      return { userId: null, prisma }; // Handle any unexpected errors, still return context
+    }
+  },
+});
 
 export { handler as GET, handler as POST };

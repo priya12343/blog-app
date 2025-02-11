@@ -5,7 +5,7 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_API_URL + "/api/graphql" || 'https://posgreSql.vercel.app/api/graphql',
+  uri: process.env.NEXT_PUBLIC_API_URL + "/api/graphql" || 'https://blog-app-priya12343-priya-vinayagams-projects.vercel.app//api/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
