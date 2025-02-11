@@ -69,7 +69,7 @@ Environment Variables
 
 Create a .env file in the root directory with the following values:
 
-DATABASE_URL="postgresql://postgres:PostgrePass@localhost:8080/postgres?schema=public"
+DATABASE_URL="postgresql://postgres:Priyasahi@123@db.nbibldrtcnhzkkdmlylh.supabase.co:5432/postgres"
 JWT_SECRET="25a3eb189093cd4cc249102af2d1680e644d4c74af60cd9976606cb821a189aab936feeed27d59288e59c92cecc78aa3a1d05b2fe0bcc71263b30e8d2fc755f0"
 NEXT_PUBLIC_API_URL="https://blog-app-priya12343-priya-vinayagams-projects.vercel.app"
 
