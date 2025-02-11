@@ -37,3 +37,4 @@ const handler = startServerAndCreateNextHandler(apolloServer, {
 });
 
 export { handler as GET, handler as POST };
+

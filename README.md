@@ -63,7 +63,7 @@ Set up your PostgreSQL database. Make sure to create a database for the project 
 
 Set up the GraphQL API server by running the following command to start the Next.js development server:  npm run dev
 
-This will start the application at http://localhost:3000.
+This will start the application at https://blog-app-priya12343-priya-vinayagams-projects.vercel.app.
 
 Environment Variables
 
@@ -71,7 +71,7 @@ Create a .env file in the root directory with the following values:
 
 DATABASE_URL="postgresql://postgres:PostgrePass@localhost:8080/postgres?schema=public"
 JWT_SECRET="25a3eb189093cd4cc249102af2d1680e644d4c74af60cd9976606cb821a189aab936feeed27d59288e59c92cecc78aa3a1d05b2fe0bcc71263b30e8d2fc755f0"
-NEXT_PUBLIC_API_URL="http://localhost:3000"
+NEXT_PUBLIC_API_URL="https://blog-app-priya12343-priya-vinayagams-projects.vercel.app"
 
 Make sure to replace <username>, <password>, and <your-database-name> with your actual PostgreSQL credentials.
 Features
